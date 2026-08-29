@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "upstreams": [
+    {
+      "name": "ctf-skills",
+      "url": "https://github.com/ljagiello/ctf-skills.git",
+      "sha": "36c72e53a96a035791821caff7440882ea0f5c57",
+      "role": "runtime",
+      "expected_paths": [
+        "solve-challenge/SKILL.md",
+        "ctf-web/SKILL.md",
+        "ctf-pwn/SKILL.md",
+        "ctf-crypto/SKILL.md",
+        "ctf-reverse/SKILL.md",
+        "ctf-forensics/SKILL.md",
+        "ctf-osint/SKILL.md",
+        "ctf-malware/SKILL.md",
+        "ctf-misc/SKILL.md",
+        "ctf-ai-ml/SKILL.md",
+        "ctf-writeup/SKILL.md"
+      ]
+    },
+    {
+      "name": "ctf-agent",
+      "url": "https://github.com/verialabs/ctf-agent.git",
+      "sha": "3366d569557c4fda3fd153040632de65e255396d",
+      "role": "runtime",
+      "expected_paths": [
+        "README.md",
+        "backend/agents/solver.py",
+        "sandbox/Dockerfile.sandbox",
+        "sandbox/sandbox-tools.txt"
+      ]
+    },
+    {
+      "name": "nus-workstation",
+      "url": "https://github.com/NUSGreyhats/ctf-agent-workstation.git",
+      "sha": "129a7902b0241c20469f21ea544b6973d995556b",
+      "role": "reference",
+      "expected_paths": [
+        "README.md",
+        "SWARM.md",
+        "install_scripts/013_install-skills.sh"
+      ]
+    },
+    {
+      "name": "nyu-dcipher",
+      "url": "https://github.com/NYU-LLM-CTF/nyuctf_agents.git",
+      "sha": "612190f298ae9e604f00370019beed4ba1f372f6",
+      "role": "reference",
+      "expected_paths": [
+        "README.md",
+        "setup_dcipher.sh",
+        "docker/multiagent/Dockerfile"
+      ]
+    }
+  ]
+}

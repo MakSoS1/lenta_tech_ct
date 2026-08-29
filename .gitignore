@@ -1,0 +1,47 @@
+# Ephemeral CTF state — never commit live challenge data or outputs.
+.ctf-work/
+.runtime/
+.codex/skills/
+.claude/skills/
+
+# Secrets and environment files.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*
+*token*
+flag.txt
+flags.txt
+*.flag
+
+# Raw challenge / forensic data belongs under .ctf-work/.
+*.pcap
+*.pcapng
+*.raw
+*.dmp
+*.dump
+*.core
+*.mem
+*.E01
+*.img
+*.iso
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+
+# Generated outputs and caches.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.out
+*.bin
+.DS_Store

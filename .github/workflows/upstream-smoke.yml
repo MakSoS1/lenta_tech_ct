@@ -1,0 +1,58 @@
+name: upstream-smoke
+
+on:
+  push:
+    paths:
+      - "config/upstreams.lock.json"
+      - "scripts/bootstrap.sh"
+      - "scripts/link_skills.sh"
+      - "scripts/validate_upstreams.py"
+      - ".github/workflows/upstream-smoke.yml"
+  pull_request:
+    paths:
+      - "config/upstreams.lock.json"
+      - "scripts/bootstrap.sh"
+      - "scripts/link_skills.sh"
+      - "scripts/validate_upstreams.py"
+      - ".github/workflows/upstream-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  immutable-upstreams:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout pinned workspace revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Fetch all four exact upstream commits
+        run: ./scripts/bootstrap.sh --all
+
+      - name: Verify checkout identity and expected architecture files
+        run: |
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path.cwd()
+          data = json.loads((root / "config" / "upstreams.lock.json").read_text(encoding="utf-8"))
+          for entry in data["upstreams"]:
+              dest = root / ".runtime" / "upstreams" / entry["name"]
+              head = subprocess.check_output(
+                  ["git", "-C", str(dest), "rev-parse", "HEAD"], text=True
+              ).strip()
+              if head != entry["sha"]:
+                  raise SystemExit(f"{entry['name']}: unexpected checkout SHA")
+              for rel in entry["expected_paths"]:
+                  if not (dest / rel).exists():
+                      raise SystemExit(f"{entry['name']}: expected path missing: {rel}")
+              print(f"{entry['name']}: immutable checkout verified")
+          print("reference upstreams verified: nus-workstation, nyu-dcipher")
+          print("reference installer scripts were not executed")
+          PY

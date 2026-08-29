@@ -1,0 +1,54 @@
+name: build-ctf-env
+
+on:
+  push:
+    paths:
+      - "docker/**"
+      - "scripts/**"
+      - "config/upstreams.lock.json"
+      - ".github/workflows/build-ctf-env.yml"
+  pull_request:
+    paths:
+      - "docker/**"
+      - "scripts/**"
+      - "config/upstreams.lock.json"
+      - ".github/workflows/build-ctf-env.yml"
+  workflow_dispatch:
+    inputs:
+      build_veria:
+        description: "Also build the large pinned Veria ctf-sandbox image"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  fast-toolbox:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout pinned workspace revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Fetch pinned runtime upstreams
+        run: ./scripts/bootstrap.sh
+
+      - name: Build and smoke-test fast toolbox
+        run: ./scripts/build_images.sh fast
+
+  veria-heavy-toolbox:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_veria }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout pinned workspace revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Build exact pinned Veria heavy sandbox
+        run: ./scripts/build_images.sh veria

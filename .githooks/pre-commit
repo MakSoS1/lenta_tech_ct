@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+blocked=0
+
+while IFS= read -r -d '' path; do
+  case "$path" in
+    .ctf-work/*|.runtime/*|.codex/skills/*|.claude/skills/*)
+      echo "pre-commit: refusing private/runtime path: $path" >&2
+      blocked=1
+      ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if (( blocked != 0 )); then
+  exit 1
+fi
+
+python3 "$ROOT/scripts/secret_scan.py" --repo "$ROOT" --staged
