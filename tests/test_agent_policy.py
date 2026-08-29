@@ -16,6 +16,7 @@ class AgentPolicyTests(unittest.TestCase):
             "never put a flag",
             "public github actions",
             "load exactly one category skill",
+            "challenge-provided executables never receive network access",
             ".ctf-work",
         )
         for phrase in required:
