@@ -1,0 +1,1 @@
+# lenta_tech_ct
