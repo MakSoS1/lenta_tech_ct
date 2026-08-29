@@ -1,0 +1,44 @@
+name: Sudokrypt safe solve
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "ctf/sudokrypt/**"
+      - ".github/workflows/sudokrypt-safe.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  solve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Solve and encrypt result
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          python3 ctf/sudokrypt/solve.py \
+            --host tcp.sasc.tf \
+            --port 31415 \
+            --queries 96 \
+            --output /tmp/sudokrypt.flag
+
+          openssl pkeyutl -encrypt \
+            -pubin \
+            -inkey ctf/sudokrypt/result_public.pem \
+            -in /tmp/sudokrypt.flag \
+            -out /tmp/sudokrypt.flag.enc \
+            -pkeyopt rsa_padding_mode:oaep \
+            -pkeyopt rsa_oaep_md:sha256
+
+          rm -f /tmp/sudokrypt.flag
+          printf 'RESULT_B64='
+          base64 -w0 /tmp/sudokrypt.flag.enc
+          printf '\n'
+          rm -f /tmp/sudokrypt.flag.enc
