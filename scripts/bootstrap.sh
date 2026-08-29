@@ -51,6 +51,7 @@ clone_exact() {
 }
 
 while IFS=$'\t' read -r name url sha role expected; do
+  [[ "$role" == "runtime" || "$role" == "reference" ]] || { echo "bootstrap: invalid role for $name" >&2; exit 3; }
   clone_exact "$name" "$url" "$sha" "$expected"
 done < <(python3 "$ROOT/scripts/validate_upstreams.py" --emit "$MODE")
 

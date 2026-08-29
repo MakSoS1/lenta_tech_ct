@@ -30,7 +30,7 @@ for provider in .codex .claude; do
   dest="$ROOT/$provider/skills"
   mkdir -p "$dest"
   for skill in "${SKILLS[@]}"; do
-    rm -rf "$dest/$skill"
+    rm -rf "${dest:?}/${skill:?}"
     ln -s "../../.runtime/upstreams/ctf-skills/$skill" "$dest/$skill"
   done
 done

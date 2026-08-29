@@ -43,8 +43,8 @@ DOCKER_ARGS=(
   --memory "${CTF_DOCKER_MEMORY:-4g}"
   --cpus "${CTF_DOCKER_CPUS:-2}"
   --read-only
-  --tmpfs /tmp:rw,nosuid,nodev,size=1g
-  --tmpfs /home/ctf:rw,nosuid,nodev,size=256m
+  --tmpfs "/tmp:rw,nosuid,nodev,size=1g"
+  --tmpfs "/home/ctf:rw,nosuid,nodev,size=256m"
   --env HOME=/home/ctf
   --env LANG=C.UTF-8
   --mount "type=bind,src=$TASK_DIR,dst=/challenge,rw"
