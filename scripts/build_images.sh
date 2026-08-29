@@ -15,9 +15,10 @@ build_fast() {
     command -v file
     command -v readelf
     command -v objdump
-    command -v checksec
+    command -v pwn
     command -v tshark
     command -v nmap
+    pwn checksec --help >/dev/null
     python3 - <<"PY"
 import Crypto
 import pwn
