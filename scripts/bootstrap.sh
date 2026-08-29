@@ -19,6 +19,7 @@ if [[ "$VERIFY_ONLY" -eq 1 ]]; then
   exit 0
 fi
 
+"$ROOT/scripts/install_hooks.sh"
 mkdir -p "$RUNTIME"
 
 clone_exact() {

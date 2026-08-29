@@ -8,11 +8,11 @@ python3 scripts/validate_upstreams.py
 python3 -m unittest discover -s tests -v
 python3 -m py_compile scripts/*.py tests/*.py
 
-for script in scripts/*.sh; do
+for script in scripts/*.sh .githooks/pre-commit; do
   bash -n "$script"
 done
 if command -v shellcheck >/dev/null 2>&1; then
-  shellcheck scripts/*.sh
+  shellcheck scripts/*.sh .githooks/pre-commit
 else
   echo "preflight: shellcheck not installed; bash -n completed"
 fi
